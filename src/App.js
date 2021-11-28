@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+
+import ImageCropper from "./components/ImageCropper";
+
+import { Routes, Route } from "react-router-dom";
+import {
+  // Welcome,
+  MultipleMonths,
+  SingleMonth,
+  Birthdays,
+  YearEvents,
+} from "./pages";
+
+import AppBar from "./components/AppBar";
 
 function App() {
+  // this should be called only when rendering the pdf for preview or download
+  // const state = useSelector((state) => state);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <AppBar />
+      <Routes>
+        {/* <Route path="/" element={<Welcome />} /> */}
+        <Route path="/" element={<MultipleMonths />} />
+        <Route path="design" element={<MultipleMonths />} />
+        <Route path="design/:month" element={<SingleMonth />} />
+        <Route path="birthdays" element={<Birthdays />} />
+        <Route path="yearEvents" element={<YearEvents />} />
+      </Routes>
+      {/* <OpenFolderDialog /> */}
+
+      {/* <PDFViewer width="100%" height="1000px">
+          <Calendar state={state} />
+        </PDFViewer> */}
+      <ImageCropper />
+    </>
   );
 }
 
