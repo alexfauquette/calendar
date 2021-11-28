@@ -76,6 +76,7 @@ export default function ImageDrawer() {
                   onDragStart={() => {
                     dispatch(startDragging({ src: url }));
                   }}
+                  loading="lazy"
                 />
               </ImageListItem>
             ))}
