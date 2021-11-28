@@ -5,7 +5,12 @@ import { fr } from "date-fns/locale";
 import { DAY_HEIGHT, TEXT_SPACE, BORDER_WIDTH } from "../../const";
 import { getNickName } from "../../features/birthdays";
 import { SAINTS } from "./saints";
+import { joursFeries } from "./joursFeries";
 
+const getFerieDay = (day) => {
+  const formatedDay = format(day, "yyyy-MM-dd");
+  return joursFeries[formatedDay];
+};
 const styles = StyleSheet.create({
   day: {
     display: "flex",
@@ -39,18 +44,24 @@ const Day = ({ day, isLastDay, birthdays }) => {
   const weekDay = format(day, "ccccc", { locale: fr });
 
   const isEvenDay = Number(numberDay) % 2 === 1;
+
+  const nationalCelebration = getFerieDay(day);
   return (
     <View
       style={{
         ...styles.day,
         borderBottomWidth: isLastDay ? BORDER_WIDTH : 0,
-        backgroundColor: getDay(day) === 0 ? "lightblue" : "transparent",
+        backgroundColor:
+          getDay(day) === 0 || nationalCelebration
+            ? "lightblue"
+            : "transparent",
       }}
     >
       <Text style={styles.dayNumber}>{numberDay}</Text>
       <Text style={styles.dayInitial}>{weekDay}</Text>
       <Text style={styles.saint}>
-        St {SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}
+        {nationalCelebration ||
+          `St ${SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}`}
       </Text>
       <Text style={{ flexGrow: 1 }}></Text>
       <Text style={styles.birthdays}>
@@ -70,18 +81,23 @@ export const HTMLDay = ({ day, isLastDay, birthdays }) => {
   const numberDay = format(day, "dd", { locale: fr });
   const weekDay = format(day, "ccccc", { locale: fr });
 
+  const nationalCelebration = getFerieDay(day);
   return (
     <div
       style={{
         ...styles.day,
         borderBottomWidth: isLastDay ? BORDER_WIDTH : 0,
-        backgroundColor: getDay(day) === 0 ? "lightblue" : "transparent",
+        backgroundColor:
+          getDay(day) === 0 || nationalCelebration
+            ? "lightblue"
+            : "transparent",
       }}
     >
       <span style={styles.dayNumber}>{numberDay}</span>
       <span style={styles.dayInitial}>{weekDay}</span>
       <span style={styles.saint}>
-        St {SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}
+        {nationalCelebration ||
+          `St ${SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}`}
       </span>
       <span style={{ flexGrow: 1 }}></span>
       <span style={styles.birthdays}>
