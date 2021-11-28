@@ -52,6 +52,19 @@ export const pictureSystemSlice = createSlice({
         });
       });
     },
+    setMonths: (state, action) => {
+      state.months = action.payload;
+
+      state.months.forEach((month) => {
+        month.forEach((picture) => {
+          if (picture && picture.name) {
+            picture.src = state.pictures.find(
+              (p) => p.name === picture.name
+            )?.url;
+          }
+        });
+      });
+    },
     updatePicture: (state, action) => {
       const { monthIndex, pictureIndex, ...override } = action.payload;
 
@@ -77,7 +90,7 @@ export const pictureSystemSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { fetchPictures, updatePicture, setCropper } =
+export const { fetchPictures, updatePicture, setCropper, setMonths } =
   pictureSystemSlice.actions;
 
 export default pictureSystemSlice.reducer;

@@ -55,6 +55,9 @@ export async function openFolder({
 
   const pictures = [];
 
+  let designObject = null;
+  let calendarObject = null;
+
   for await (const entry of dirHandle.values()) {
     if (setPictures && isImage(entry.name)) {
       const f = await entry.getFile();
@@ -66,16 +69,28 @@ export async function openFolder({
     } else if (setCalendar && entry.name === "calendar.json") {
       const f = await entry.getFile();
       const text = await f.text();
-      setCalendar(JSON.parse(text));
+      calendarObject = JSON.parse(text);
     } else if (setDesign && entry.name === "design.json") {
       const f = await entry.getFile();
       const text = await f.text();
-      setDesign(JSON.parse(text));
+      designObject = JSON.parse(text);
     }
   }
 
   if (setPictures) {
     setPictures(pictures);
+  }
+  if (setDesign && designObject) {
+    designObject.pictures.forEach((month) => {
+      month.forEach((picture) => {
+        if (picture && picture.src) picture.src = undefined;
+      });
+    });
+    console.log(designObject);
+    setDesign(designObject);
+  }
+  if (setCalendar && calendarObject) {
+    setCalendar(calendarObject);
   }
 }
 

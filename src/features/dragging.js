@@ -8,6 +8,7 @@ export const draggingSlice = createSlice({
   reducers: {
     startDragging: (state, action) => {
       state.src = action.payload.src;
+      state.name = action.payload.name;
     },
   },
 });

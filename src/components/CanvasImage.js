@@ -16,12 +16,21 @@ export default function CanvasImage({
     (state) => state.pictureSystem.months[monthIndex][pictureIndex]
   );
   const draggingSrc = useSelector((state) => state.dragging.src);
+  const draggingName = useSelector((state) => state.dragging.name);
   const canvasRef = React.useRef(null);
   const dispatch = useDispatch();
 
   const onDrop = (e) => {
+    console.log({ draggingName, draggingSrc });
     e.preventDefault();
-    dispatch(updatePicture({ monthIndex, pictureIndex, src: draggingSrc }));
+    dispatch(
+      updatePicture({
+        monthIndex,
+        pictureIndex,
+        src: draggingSrc,
+        name: draggingName,
+      })
+    );
   };
 
   const onClick = (event) => {

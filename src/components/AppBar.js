@@ -21,7 +21,7 @@ export default function AppBar() {
   const navigate = useNavigate();
 
   const birthdays = useSelector((state) => state.birthdays.values);
-  const pictures = useSelector((state) => state.pictureSystem.pictures);
+  const months = useSelector((state) => state.pictureSystem.months);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -104,8 +104,9 @@ export default function AppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={() => {
+              console.log(months);
               saveFolder({
-                values: { calendar: birthdays, design: { pictures } },
+                values: { calendar: birthdays, design: { pictures: months } },
               });
             }}
           >

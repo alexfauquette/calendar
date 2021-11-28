@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { startDragging } from "../features/dragging";
-import { fetchPictures } from "../features/pictureSystem";
+import { fetchPictures, setMonths } from "../features/pictureSystem";
 import { setBirthdays } from "../features/birthdays";
 
 import { openFolder } from "../components/fileManagement/utils";
@@ -22,6 +22,10 @@ export default function ImageDrawer() {
 
   const setCalendar = (x) => {
     dispatch(setBirthdays(x));
+  };
+
+  const setDesign = ({ pictures }) => {
+    dispatch(setMonths(pictures));
   };
 
   const picturesLoaded = pictures.length > 0;
@@ -45,7 +49,7 @@ export default function ImageDrawer() {
           <Button
             onClick={() => {
               openFolder({
-                setters: { setPictures, setCalendar },
+                setters: { setPictures, setCalendar, setDesign },
                 tryPreviousFolder: !picturesLoaded,
               });
             }}
@@ -67,14 +71,14 @@ export default function ImageDrawer() {
         </Box>
         {picturesLoaded && (
           <ImageList variant="masonry" cols={2} gap={5}>
-            {pictures.map(({ url }) => (
+            {pictures.map(({ url, name }) => (
               <ImageListItem key={url}>
                 <img
                   src={url}
                   width={200}
                   alt=""
                   onDragStart={() => {
-                    dispatch(startDragging({ src: url }));
+                    dispatch(startDragging({ src: url, name }));
                   }}
                   loading="lazy"
                 />
