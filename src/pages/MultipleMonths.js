@@ -11,6 +11,8 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+import { IMAGE_MENU_WIDTH } from "../const";
+
 const MINI_MONTH_WIDTH = 210;
 const MINI_MONTH_HEIGHT = 297;
 const MIN_ZOOM = 0.5;
@@ -19,7 +21,6 @@ const MAX_ZOOM = 3;
 export default function MultipleMonths() {
   const navigate = useNavigate();
 
-  const [month, setMonth] = React.useState(0);
   const calendarRef = React.useRef(null);
   const [scale, setScale] = React.useState(1);
   const [zoom, setZoom] = React.useState(1);
@@ -40,7 +41,7 @@ export default function MultipleMonths() {
       <div
         style={{
           maxHeight: "100vh",
-          paddingLeft: 400,
+          paddingLeft: IMAGE_MENU_WIDTH,
           paddingTop: "64px",
         }}
       >
@@ -85,9 +86,19 @@ export default function MultipleMonths() {
             >
               <RemoveIcon />
             </Fab>
-            <Typography variant="p" component="span" sx={{ margin: "0 1rem" }}>
-              {zoom}
-            </Typography>
+            <Box
+              sx={{
+                margin: "0 1rem",
+                width: "2rem",
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                display: "inline-block",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="p" component="span">
+                {zoom}
+              </Typography>
+            </Box>
             <Fab
               color="primary"
               size="small"

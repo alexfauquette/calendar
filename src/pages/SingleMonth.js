@@ -14,6 +14,8 @@ import Box from "@mui/material/Box";
 
 import Fab from "@mui/material/Fab";
 
+import { LEFT_MENU_WIDTH, IMAGE_MENU_WIDTH } from "../const";
+
 export default function SingleMonth() {
   const navigate = useNavigate();
 
@@ -28,7 +30,10 @@ export default function SingleMonth() {
   const updateCalendarSize = () => {
     if (calendarRef.current && displayDivRef.current) {
       const xScale =
-        (displayDivRef.current.offsetWidth - 100 - 400) /
+        (displayDivRef.current.offsetWidth -
+          100 -
+          LEFT_MENU_WIDTH -
+          IMAGE_MENU_WIDTH) /
         calendarRef.current.clientWidth;
       const yScale =
         (displayDivRef.current.offsetHeight - 100 - 114) /
@@ -58,7 +63,7 @@ export default function SingleMonth() {
       <div
         style={{
           height: "100vh",
-          paddingLeft: 400,
+          paddingLeft: IMAGE_MENU_WIDTH,
           paddingTop: "64px",
         }}
         ref={displayDivRef}

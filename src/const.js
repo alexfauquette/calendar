@@ -8,3 +8,6 @@ export const HEADER_TOP_PADDING = "1.3cm";
 
 export const PICTURE_WIDTH = 8;
 export const PICTURE_HEIGHT = 8.8;
+
+export const LEFT_MENU_WIDTH = 55;
+export const IMAGE_MENU_WIDTH = 450;

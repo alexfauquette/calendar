@@ -4,12 +4,15 @@ import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 
+import { Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { startDragging } from "../features/dragging";
 import { fetchPictures, setMonths } from "../features/pictureSystem";
 import { setBirthdays } from "../features/birthdays";
+
+import { LEFT_MENU_WIDTH, IMAGE_MENU_WIDTH } from "../const";
 
 import { openFolder } from "../components/fileManagement/utils";
 export default function ImageDrawer() {
@@ -33,40 +36,84 @@ export default function ImageDrawer() {
   return (
     <Drawer
       sx={{
-        width: 400,
+        width: `${IMAGE_MENU_WIDTH}px`,
         flexShrink: 0,
+        marginLeft: `${LEFT_MENU_WIDTH}px`,
+
         "& .MuiDrawer-paper": {
-          width: 400,
+          width: `${IMAGE_MENU_WIDTH}px`,
+          marginLeft: `${LEFT_MENU_WIDTH}px`,
           boxSizing: "border-box",
+          borderRight: "1px solid lightgray",
         },
       }}
       variant="permanent"
       anchor="top"
     >
       <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
-        <Box>
-          <Button
-            onClick={() => {
-              openFolder({
-                setters: { setPictures, setCalendar, setDesign },
-                tryPreviousFolder: !picturesLoaded,
-              });
-            }}
-          >
-            {picturesLoaded ? "Changer" : "Ouvrir"}
-          </Button>
-          {picturesLoaded && (
-            <Button
-              onClick={() =>
-                openFolder({
-                  setters: { setPictures },
-                  tryPreviousFolder: true,
-                })
-              }
-            >
-              Rafraîchir
-            </Button>
+      <Box sx={{ overflow: "auto", height: "100vh" }}>
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 5,
+            backgroundColor: "white",
+            padding: picturesLoaded ? "4px" : "100px 4px 4px 4px",
+            display: "flex",
+            justifyContent: "space-around",
+            flexDirection: picturesLoaded ? "row" : "column",
+          }}
+        >
+          {picturesLoaded ? (
+            <>
+              <Tooltip
+                title="Attention, les données non enregistrées seront perdu"
+                placement="bottom"
+              >
+                <Button
+                  onClick={() => {
+                    openFolder({
+                      setters: { setPictures, setCalendar, setDesign },
+                      tryPreviousFolder: false,
+                    });
+                  }}
+                  variant="outlined"
+                >
+                  Changer de dossier
+                </Button>
+              </Tooltip>
+              <Tooltip title="Récupère les dernières image que vous avez ajoutées dans le dossier">
+                <Button
+                  onClick={() =>
+                    openFolder({
+                      setters: { setPictures },
+                      tryPreviousFolder: true,
+                    })
+                  }
+                  variant="contained"
+                >
+                  Rafraîchir le dossier
+                </Button>
+              </Tooltip>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  openFolder({
+                    setters: { setPictures, setCalendar, setDesign },
+                    tryPreviousFolder: true,
+                  });
+                }}
+              >
+                Ouvrir un dossier
+              </Button>
+              <p style={{ padding: "1rem" }}>
+                Ouvrez le dossier dans lequel se trouve les images pour
+                personnaliser votre calendrier
+              </p>
+            </>
           )}
         </Box>
         {picturesLoaded && (
