@@ -1,12 +1,5 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-
-import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,56 +8,69 @@ import {
   getNickName,
 } from "../features/birthdays";
 
-import { DataGrid } from "@mui/x-data-grid";
-
-const birthdayColumns = [
-  {
-    headerName: "Nom",
-    field: "firstName",
-    editable: true,
-    flex: 2,
-  },
-  {
-    headerName: "Prénom",
-    field: "lastName",
-    editable: true,
-    flex: 2,
-  },
-  {
-    headerName: "Présentation",
-    field: "nickname",
-    editable: true,
-    flex: 2,
-  },
-  {
-    headerName: "Date de naissance",
-    field: "birthday",
-    type: "date",
-    valueGetter: ({ value }) => {
-      return new Date(value);
-    },
-    editable: true,
-    flex: 1,
-  },
-  {
-    headerName: "Afficher",
-    field: "printed",
-    type: "boolean",
-    editable: true,
-    flex: 1,
-  },
-  {
-    headerName: "Afficher l'age",
-    field: "agePrinted",
-    type: "boolean",
-    editable: true,
-    flex: 1,
-  },
-];
+import DeleteIcon from "@mui/icons-material/Delete";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 
 export default function Birthdays() {
   const values = useSelector((state) => state.birthdays.values);
   const dispatch = useDispatch();
+
+  const birthdayColumns = [
+    {
+      headerName: "Nom",
+      field: "firstName",
+      editable: true,
+      flex: 2,
+    },
+    {
+      headerName: "Prénom",
+      field: "lastName",
+      editable: true,
+      flex: 2,
+    },
+    {
+      headerName: "Présentation",
+      field: "nickname",
+      editable: true,
+      flex: 2,
+    },
+    {
+      headerName: "Date de naissance",
+      field: "birthday",
+      type: "date",
+      valueGetter: ({ value }) => {
+        return new Date(value);
+      },
+      editable: true,
+      flex: 1,
+    },
+    {
+      headerName: "Afficher",
+      field: "printed",
+      type: "boolean",
+      editable: true,
+      flex: 1,
+    },
+    {
+      headerName: "Afficher l'age",
+      field: "agePrinted",
+      type: "boolean",
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      width: 80,
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => dispatch(removeBirthday({ id: params.id }))}
+        />,
+      ],
+    },
+  ];
 
   return (
     <div
@@ -115,29 +121,6 @@ export default function Birthdays() {
       >
         Ajouter une ligne
       </Button>
-
-      {/* {loadedPictures.length === 0 && (
-        <Card
-          sx={{ minWidth: 275, maxWidth: 500, margin: "1rem auto" }}
-          variant="outlined"
-        >
-          <CardContent
-            sx={{
-              textAlign: "left",
-            }}
-          >
-            <Typography>Bienvenu,</Typography>
-            <Typography variant="body1">
-              Pour utiliser cette application, mettez toutes les photos qu vous
-              souhaitez utiliser dans un dossier, et ouvrez ce dossier avec le
-              bouton ci dessous.
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button onClick={onClick}>Ouvrir le dossier</Button>
-          </CardActions>
-        </Card>
-      )} */}
     </div>
   );
 }
