@@ -1,5 +1,5 @@
 import React from "react";
-import { eachDayOfInterval, intlFormat, getDate, getMonth } from "date-fns";
+import { eachDayOfInterval, intlFormat } from "date-fns";
 import Day from "./day";
 import {
   PICTURE_WIDTH,
@@ -9,9 +9,6 @@ import {
   HEADER_HEIGHT,
 } from "../../const";
 import CanvasImage from "../CanvasImage";
-
-import { useSelector } from "react-redux";
-import { differenceInYears } from "date-fns";
 
 // Create styles
 const styles = {
@@ -57,15 +54,6 @@ const Month = React.forwardRef(({ year, month }, ref) => {
     end: new Date(year, month + 1, 0),
   });
 
-  const monthBirthdays = useSelector((state) =>
-    state.birthdays.values.filter((row) => {
-      return (
-        row.birthday &&
-        getMonth(new Date(year, month, 1)) === getMonth(new Date(row.birthday))
-      );
-    })
-  );
-
   return (
     <div style={{ ...styles.page, height: "29.7cm", width: "21cm" }} ref={ref}>
       <div style={styles.header}>
@@ -101,18 +89,11 @@ const Month = React.forwardRef(({ year, month }, ref) => {
         </div>
         <div style={styles.calendar}>
           {days.map((day, index) => {
-            const birthdays = monthBirthdays
-              .filter((row) => getDate(day) === getDate(new Date(row.birthday)))
-              .map((row) => ({
-                ...row,
-                age: differenceInYears(day, new Date(row.birthday)),
-              }));
             return (
               <Day
                 key={index}
                 day={day}
                 isLastDay={index === days.length - 1}
-                birthdays={birthdays}
               />
             );
           })}

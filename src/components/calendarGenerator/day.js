@@ -1,14 +1,24 @@
 import React from "react";
-import { format, getDate, getDay, getMonth } from "date-fns";
+import {
+  format,
+  getDate,
+  getDay,
+  getMonth,
+  differenceInYears,
+  getYear,
+} from "date-fns";
 import { fr } from "date-fns/locale";
 import { DAY_HEIGHT, TEXT_SPACE, BORDER_WIDTH } from "../../const";
 import { SAINTS } from "./saints";
 import { joursFeries } from "./joursFeries";
+import { setCurrentEditor } from "../../features/dayEditing";
+import { useSelector, useDispatch } from "react-redux";
 
 const getFerieDay = (day) => {
   const formatedDay = format(day, "yyyy-MM-dd");
   return joursFeries[formatedDay];
 };
+
 const styles = {
   day: {
     display: "flex",
@@ -36,11 +46,37 @@ const styles = {
   birthdays: { marginRight: "1cm", fontSize: "12pt" },
 };
 
-const Day = ({ day, isLastDay, birthdays }) => {
+const Day = ({ day, isLastDay }) => {
+  const dispatch = useDispatch();
+  const openEditor = () => {
+    dispatch(
+      setCurrentEditor({
+        day: getDate(day),
+        monthIndex: getMonth(day),
+        year: getYear(day),
+      })
+    );
+  };
+
   const numberDay = format(day, "dd", { locale: fr });
   const weekDay = format(day, "ccccc", { locale: fr });
 
   const nationalCelebration = getFerieDay(day);
+
+  const birthdays = useSelector((state) =>
+    state.birthdays.values.filter((row) => {
+      return (
+        row.birthday &&
+        getMonth(day) === getMonth(new Date(row.birthday)) &&
+        getDate(day) === getDate(new Date(row.birthday))
+      );
+    })
+  );
+  const formatedBirthdays = birthdays.map((row) => ({
+    ...row,
+    age: differenceInYears(day, new Date(row.birthday)),
+  }));
+
   return (
     <div
       style={{
@@ -51,6 +87,7 @@ const Day = ({ day, isLastDay, birthdays }) => {
             ? "lightblue"
             : "transparent",
       }}
+      onClick={openEditor}
     >
       <span style={styles.dayNumber}>{numberDay}</span>
       <span style={styles.dayInitial}>{weekDay}</span>
@@ -60,7 +97,7 @@ const Day = ({ day, isLastDay, birthdays }) => {
       </span>
       <span style={{ flexGrow: 1 }}></span>
       <span style={styles.birthdays}>
-        {birthdays
+        {formatedBirthdays
           .filter((row) => row.printed && row.nickname.trim())
           .map(
             (row) =>

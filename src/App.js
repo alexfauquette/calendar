@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import ImageCropper from "./components/ImageCropper";
+import DayEditor from "./components/DayEditor";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
@@ -22,7 +23,6 @@ import {
 import { LEFT_MENU_WIDTH } from "./const";
 
 import AppBar from "./components/AppBar";
-import { Typography } from "@mui/material";
 
 function App() {
   const navigate = useNavigate();
@@ -88,6 +88,7 @@ function App() {
         </Routes>
       </div>
       <ImageCropper />
+      <DayEditor />
     </>
   );
 }
