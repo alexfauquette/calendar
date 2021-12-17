@@ -1,13 +1,13 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { PICTURE_HEIGHT, PICTURE_WIDTH } from "../const";
+import { PICTURE_HEIGHT, PICTURE_WIDTH, PX_PER_CM } from "../const";
 import { setCropper, updatePicture } from "../features/pictureSystem";
 import PhotoCameraRoundedIcon from "@mui/icons-material/PhotoCameraRounded";
 import Box from "@mui/material/Box";
 
 export default function CanvasImage({
-  width = PICTURE_WIDTH * 500,
-  height = PICTURE_HEIGHT * 500,
+  width = PICTURE_WIDTH * PX_PER_CM,
+  height = PICTURE_HEIGHT * PX_PER_CM,
   monthIndex,
   pictureIndex,
   ...others

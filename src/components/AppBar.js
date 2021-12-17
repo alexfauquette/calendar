@@ -9,13 +9,14 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Dialog from "@mui/material/Dialog";
 
-import RenderPDF from "./calendarGenerator/renderPDF";
+import { useReactToPrint } from "react-to-print";
 
 import { useNavigate } from "react-router-dom";
 import { saveFolder } from "./fileManagement/utils";
 import { useSelector } from "react-redux";
+
+import CalendarToPrint from "./calendarGenerator";
 
 export default function AppBar() {
   const navigate = useNavigate();
@@ -32,13 +33,10 @@ export default function AppBar() {
     setAnchorEl(null);
   };
 
-  const [openPDF, setOpenPDF] = React.useState(false);
-  const handleOpenPDF = () => {
-    setOpenPDF(true);
-  };
-  const handleClosePDF = () => {
-    setOpenPDF(false);
-  };
+  const calendarToPrintRef = React.useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => calendarToPrintRef.current,
+  });
 
   return (
     <>
@@ -93,7 +91,8 @@ export default function AppBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => handleOpenPDF()}
+            onClick={() => handlePrint()}
+            // onClick={() => handleOpenPDF()}
           >
             <LocalPrintshopRoundedIcon />
           </IconButton>
@@ -115,9 +114,9 @@ export default function AppBar() {
         </Toolbar>
       </MUI_AppBar>
 
-      <Dialog onClose={handleClosePDF} open={openPDF} fullWidth>
-        {openPDF && <RenderPDF />}
-      </Dialog>
+      <div style={{ display: "none" }}>
+        <CalendarToPrint ref={calendarToPrintRef} />
+      </div>
     </>
   );
 }

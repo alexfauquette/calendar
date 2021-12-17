@@ -4,13 +4,14 @@ import ImageDrawer from "../components/ImageDrawer";
 
 import GridViewIcon from "@mui/icons-material/GridView";
 
-import { HTMLMonth } from "../components/calendarGenerator";
+import Month from "../components/calendarGenerator/Month";
 
 import { intlFormat } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 
 import Fab from "@mui/material/Fab";
 
@@ -78,6 +79,7 @@ export default function SingleMonth() {
           >
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((monthIndex) => (
               <Tab
+                key={monthIndex}
                 label={intlFormat(
                   new Date(2000, monthIndex, 1),
                   {
@@ -100,11 +102,13 @@ export default function SingleMonth() {
                   margin: "1rem",
                 }}
               >
-                <HTMLMonth
-                  year={2022}
-                  month={Number(month) || 0}
+                <Paper
+                  elevation={3}
                   ref={calendarRef}
-                />
+                  sx={{ width: "max-content" }}
+                >
+                  <Month year={2022} month={Number(month) || 0} />
+                </Paper>
               </div>
             </Box>
           </div>

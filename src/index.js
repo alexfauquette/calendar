@@ -7,13 +7,21 @@ import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import store from "./store";
 import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+const theme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
       <Provider store={store}>
-        <CssBaseline />
-        <App />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
       </Provider>
     </HashRouter>
   </React.StrictMode>,

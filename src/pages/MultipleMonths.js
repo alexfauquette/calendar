@@ -2,10 +2,11 @@ import * as React from "react";
 
 import ImageDrawer from "../components/ImageDrawer";
 
-import { HTMLMonth } from "../components/calendarGenerator";
+import Month from "../components/calendarGenerator/Month";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -68,11 +69,13 @@ export default function MultipleMonths() {
                     navigate(`/design/${monthIndex}`);
                   }}
                 >
-                  <HTMLMonth
-                    year={2022}
-                    month={monthIndex}
+                  <Paper
+                    elevation={3}
                     ref={monthIndex === 0 ? calendarRef : null}
-                  />
+                    sx={{ width: "max-content" }}
+                  >
+                    <Month year={2022} month={monthIndex} />
+                  </Paper>
                 </div>
               </div>
             ))}
