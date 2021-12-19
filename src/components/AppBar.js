@@ -23,6 +23,8 @@ export default function AppBar() {
 
   const birthdays = useSelector((state) => state.birthdays.values);
   const months = useSelector((state) => state.pictureSystem.months);
+  const dayOverride = useSelector((state) => state.dayEditing.celebrations);
+  const monthColor = useSelector((state) => state.dayEditing.monthColor);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -92,7 +94,6 @@ export default function AppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={() => handlePrint()}
-            // onClick={() => handleOpenPDF()}
           >
             <LocalPrintshopRoundedIcon />
           </IconButton>
@@ -103,9 +104,13 @@ export default function AppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={() => {
-              console.log(months);
               saveFolder({
-                values: { calendar: birthdays, design: { pictures: months } },
+                values: {
+                  calendar: birthdays,
+                  design: { pictures: months },
+                  dayOverride,
+                  monthColor,
+                },
               });
             }}
           >

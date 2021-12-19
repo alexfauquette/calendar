@@ -21,7 +21,6 @@ export default function CanvasImage({
   const dispatch = useDispatch();
 
   const onDrop = (e) => {
-    console.log({ draggingName, draggingSrc });
     e.preventDefault();
     dispatch(
       updatePicture({

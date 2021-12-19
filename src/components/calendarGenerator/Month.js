@@ -48,7 +48,7 @@ const styles = {
   },
 };
 
-const Month = React.forwardRef(({ year, month }, ref) => {
+const Month = React.forwardRef(({ year, month, editableDays = false }, ref) => {
   const days = eachDayOfInterval({
     start: new Date(year, month, 1),
     end: new Date(year, month + 1, 0),
@@ -94,6 +94,7 @@ const Month = React.forwardRef(({ year, month }, ref) => {
                 key={index}
                 day={day}
                 isLastDay={index === days.length - 1}
+                isEditable={editableDays}
               />
             );
           })}

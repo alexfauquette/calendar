@@ -45,7 +45,13 @@ export async function getFolderHandler(tryPreviousFolder) {
 }
 
 export async function openFolder({
-  setters: { setPictures, setDesign, setCalendar },
+  setters: {
+    setPictures,
+    setDesign,
+    setCalendar,
+    setDayOverride,
+    setMonthsColors,
+  },
   tryPreviousFolder,
 }) {
   const dirHandle = await getFolderHandler(tryPreviousFolder);
@@ -57,6 +63,8 @@ export async function openFolder({
 
   let designObject = null;
   let calendarObject = null;
+  let dayOverrideObject = null;
+  let monthsColorsObject = null;
 
   for await (const entry of dirHandle.values()) {
     if (setPictures && isImage(entry.name)) {
@@ -74,6 +82,14 @@ export async function openFolder({
       const f = await entry.getFile();
       const text = await f.text();
       designObject = JSON.parse(text);
+    } else if (setDayOverride && entry.name === "dayOverride.json") {
+      const f = await entry.getFile();
+      const text = await f.text();
+      dayOverrideObject = JSON.parse(text);
+    } else if (setMonthsColors && entry.name === "monthColor.json") {
+      const f = await entry.getFile();
+      const text = await f.text();
+      monthsColorsObject = JSON.parse(text);
     }
   }
 
@@ -86,16 +102,21 @@ export async function openFolder({
         if (picture && picture.src) picture.src = undefined;
       });
     });
-    console.log(designObject);
     setDesign(designObject);
   }
   if (setCalendar && calendarObject) {
     setCalendar(calendarObject);
   }
+  if (setDayOverride && dayOverrideObject) {
+    setDayOverride(dayOverrideObject);
+  }
+  if (setMonthsColors && monthsColorsObject) {
+    setMonthsColors(monthsColorsObject);
+  }
 }
 
 export async function saveFolder({
-  values: { design, calendar },
+  values: { design, calendar, dayOverride, monthColor },
   tryPreviousFolder = true,
 }) {
   const dirHandle = await getFolderHandler(tryPreviousFolder);
@@ -122,6 +143,28 @@ export async function saveFolder({
     const writable = await fileHandle.createWritable();
     // Write the contents of the file to the stream.
     await writable.write(JSON.stringify(calendar));
+    // Close the file and write the contents to disk.
+    await writable.close();
+  }
+
+  if (dayOverride) {
+    const fileHandle = await dirHandle.getFileHandle("dayOverride.json", {
+      create: true,
+    });
+    const writable = await fileHandle.createWritable();
+    // Write the contents of the file to the stream.
+    await writable.write(JSON.stringify(dayOverride));
+    // Close the file and write the contents to disk.
+    await writable.close();
+  }
+
+  if (monthColor) {
+    const fileHandle = await dirHandle.getFileHandle("monthColor.json", {
+      create: true,
+    });
+    const writable = await fileHandle.createWritable();
+    // Write the contents of the file to the stream.
+    await writable.write(JSON.stringify(monthColor));
     // Close the file and write the contents to disk.
     await writable.close();
   }

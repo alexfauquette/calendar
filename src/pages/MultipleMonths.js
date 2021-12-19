@@ -74,7 +74,11 @@ export default function MultipleMonths() {
                     ref={monthIndex === 0 ? calendarRef : null}
                     sx={{ width: "max-content" }}
                   >
-                    <Month year={2022} month={monthIndex} />
+                    <Month
+                      year={2022}
+                      month={monthIndex}
+                      editableDays={false}
+                    />
                   </Paper>
                 </div>
               </div>

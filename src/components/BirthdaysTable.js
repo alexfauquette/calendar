@@ -17,6 +17,7 @@ export default function BirthdaysTable({
   monthIndex = null,
   tableHeight = "auto",
   autoHeight = false,
+  simplified = false,
 }) {
   const values = useSelector((state) => state.birthdays.values);
   let rows = values;
@@ -36,18 +37,22 @@ export default function BirthdaysTable({
   const dispatch = useDispatch();
 
   const birthdayColumns = [
-    {
-      headerName: "Nom",
-      field: "firstName",
-      editable: true,
-      flex: 2,
-    },
-    {
-      headerName: "Prénom",
-      field: "lastName",
-      editable: true,
-      flex: 2,
-    },
+    ...(simplified
+      ? []
+      : [
+          {
+            headerName: "Nom",
+            field: "firstName",
+            editable: true,
+            flex: 1,
+          },
+          {
+            headerName: "Prénom",
+            field: "lastName",
+            editable: true,
+            flex: 1,
+          },
+        ]),
     {
       headerName: "Présentation",
       field: "nickname",
@@ -62,26 +67,26 @@ export default function BirthdaysTable({
         return new Date(value);
       },
       editable: true,
-      flex: 1,
+      flex: 2,
     },
     {
       headerName: "Afficher",
       field: "printed",
       type: "boolean",
       editable: true,
-      flex: 1,
+      width: 80,
     },
     {
-      headerName: "Afficher l'age",
+      headerName: "Age",
       field: "agePrinted",
       type: "boolean",
       editable: true,
-      flex: 1,
+      width: 60,
     },
     {
       field: "actions",
       type: "actions",
-      width: 80,
+      width: 50,
       getActions: (params) => [
         <GridActionsCellItem
           icon={<DeleteIcon />}

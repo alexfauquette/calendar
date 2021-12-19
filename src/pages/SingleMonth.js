@@ -11,16 +11,75 @@ import { useNavigate, useParams } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
+
+import { setMonthColor } from "../features/dayEditing";
+
+import { useSelector, useDispatch } from "react-redux";
+import * as colors from "@mui/material/colors";
 
 import Fab from "@mui/material/Fab";
 
 import { LEFT_MENU_WIDTH, IMAGE_MENU_WIDTH } from "../const";
 
+import CheckIcon from "@mui/icons-material/Check";
+const ColorPalette = ({ palette, value, onChange }) => (
+  <Stack direction="row" spacing={0.5} sx={{ mt: 2, ml: 1 }}>
+    {Object.keys(palette).map((colorName) => (
+      <Box
+        sx={{
+          width: 32,
+          height: 32,
+          color: "common.white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          "&:hover": { cursor: "pointer" },
+        }}
+        style={{ backgroundColor: palette[colorName] }}
+        onClick={() => {
+          if (value === palette[colorName] || !onChange) {
+            return;
+          }
+          onChange(palette[colorName]);
+        }}
+      >
+        {value === palette[colorName] ? (
+          <CheckIcon style={{ fontSize: 30 }} />
+        ) : null}
+      </Box>
+    ))}
+  </Stack>
+);
+const shade = 200;
+const palette = {
+  red: colors["red"][shade],
+  pink: colors["pink"][shade],
+  purple: colors["purple"][shade],
+  deepPurple: colors["deepPurple"][shade],
+  indigo: colors["indigo"][shade],
+  blue: colors["blue"][shade],
+  lightBlue: colors["lightBlue"][shade],
+  cyan: colors["cyan"][shade],
+  teal: colors["teal"][shade],
+  green: colors["green"][shade],
+  lightGreen: colors["lightGreen"][shade],
+  lime: colors["lime"][shade],
+  yellow: colors["yellow"][shade],
+  amber: colors["amber"][shade],
+  orange: colors["orange"][shade],
+  deepOrange: colors["deepOrange"][shade],
+};
+
 export default function SingleMonth() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const { month } = useParams();
+
+  const monthColor = useSelector(
+    (state) => state.dayEditing.monthColor[Number(month)]
+  );
 
   const [paperSize, setPaperSize] = React.useState({ width: 100, height: 100 });
   const calendarRef = React.useRef(null);
@@ -57,6 +116,10 @@ export default function SingleMonth() {
       window.removeEventListener("resize", updateCalendarSize);
     };
   }, []);
+
+  const handleColorChange = React.useCallback((newValue) =>
+    dispatch(setMonthColor({ monthIndex: Number(month), value: newValue }))
+  );
 
   return (
     <div>
@@ -107,11 +170,21 @@ export default function SingleMonth() {
                   ref={calendarRef}
                   sx={{ width: "max-content" }}
                 >
-                  <Month year={2022} month={Number(month) || 0} />
+                  <Month
+                    year={2022}
+                    month={Number(month) || 0}
+                    editableDays={true}
+                  />
                 </Paper>
               </div>
             </Box>
           </div>
+          <ColorPalette
+            palette={palette}
+            value={monthColor}
+            onChange={handleColorChange}
+          />
+
           <Box sx={{ position: "fixed", bottom: "1rem", right: "1rem" }}>
             <Fab
               color="primary"

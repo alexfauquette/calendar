@@ -11,6 +11,10 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { startDragging } from "../features/dragging";
 import { fetchPictures, setMonths } from "../features/pictureSystem";
 import { setBirthdays } from "../features/birthdays";
+import {
+  setDayOverride as setDayOverrideAction,
+  setMonthsColors as setMonthsColorsAction,
+} from "../features/dayEditing";
 
 import { LEFT_MENU_WIDTH, IMAGE_MENU_WIDTH } from "../const";
 
@@ -29,6 +33,14 @@ export default function ImageDrawer() {
 
   const setDesign = ({ pictures }) => {
     dispatch(setMonths(pictures));
+  };
+
+  const setDayOverride = (x) => {
+    dispatch(setDayOverrideAction(x));
+  };
+
+  const setMonthsColors = (x) => {
+    dispatch(setMonthsColorsAction(x));
   };
 
   const picturesLoaded = pictures.length > 0;
@@ -73,7 +85,13 @@ export default function ImageDrawer() {
                 <Button
                   onClick={() => {
                     openFolder({
-                      setters: { setPictures, setCalendar, setDesign },
+                      setters: {
+                        setPictures,
+                        setCalendar,
+                        setDesign,
+                        setDayOverride,
+                        setMonthsColors,
+                      },
                       tryPreviousFolder: false,
                     });
                   }}
@@ -102,7 +120,13 @@ export default function ImageDrawer() {
                 variant="contained"
                 onClick={() => {
                   openFolder({
-                    setters: { setPictures, setCalendar, setDesign },
+                    setters: {
+                      setPictures,
+                      setCalendar,
+                      setDesign,
+                      setDayOverride,
+                      setMonthsColors,
+                    },
                     tryPreviousFolder: true,
                   });
                 }}
@@ -122,7 +146,6 @@ export default function ImageDrawer() {
               <ImageListItem key={url}>
                 <img
                   src={url}
-                  width={200}
                   alt=""
                   onDragStart={() => {
                     dispatch(startDragging({ src: url, name }));

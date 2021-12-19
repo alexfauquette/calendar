@@ -11,4 +11,4 @@ export const PICTURE_HEIGHT = 8.8;
 export const PX_PER_CM = 60;
 
 export const LEFT_MENU_WIDTH = 55;
-export const IMAGE_MENU_WIDTH = 450;
+export const IMAGE_MENU_WIDTH = 300;

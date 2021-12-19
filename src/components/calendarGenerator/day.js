@@ -10,14 +10,13 @@ import {
 import { fr } from "date-fns/locale";
 import { DAY_HEIGHT, TEXT_SPACE, BORDER_WIDTH } from "../../const";
 import { SAINTS } from "./saints";
-import { joursFeries } from "./joursFeries";
-import { setCurrentEditor } from "../../features/dayEditing";
+import { getFerieDay } from "./joursFeries";
+import {
+  dayCelebrationSelector,
+  setCurrentEditor,
+} from "../../features/dayEditing";
 import { useSelector, useDispatch } from "react-redux";
-
-const getFerieDay = (day) => {
-  const formatedDay = format(day, "yyyy-MM-dd");
-  return joursFeries[formatedDay];
-};
+import Box from "@mui/material/Box";
 
 const styles = {
   day: {
@@ -46,22 +45,22 @@ const styles = {
   birthdays: { marginRight: "1cm", fontSize: "12pt" },
 };
 
-const Day = ({ day, isLastDay }) => {
+const Day = ({ day, isLastDay, isEditable = false }) => {
   const dispatch = useDispatch();
-  const openEditor = () => {
-    dispatch(
-      setCurrentEditor({
-        day: getDate(day),
-        monthIndex: getMonth(day),
-        year: getYear(day),
-      })
-    );
-  };
+  const openEditor = isEditable
+    ? () => {
+        dispatch(
+          setCurrentEditor({
+            day: getDate(day),
+            monthIndex: getMonth(day),
+            year: getYear(day),
+          })
+        );
+      }
+    : null;
 
   const numberDay = format(day, "dd", { locale: fr });
   const weekDay = format(day, "ccccc", { locale: fr });
-
-  const nationalCelebration = getFerieDay(day);
 
   const birthdays = useSelector((state) =>
     state.birthdays.values.filter((row) => {
@@ -77,24 +76,41 @@ const Day = ({ day, isLastDay }) => {
     age: differenceInYears(day, new Date(row.birthday)),
   }));
 
+  const color = useSelector(
+    (state) => state.dayEditing.monthColor[getMonth(day)]
+  );
+
+  const customCelebration = useSelector(dayCelebrationSelector(day));
+  const nationalCelebration = getFerieDay(day);
+  const saint = `St ${SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}`;
+
+  const celebration =
+    customCelebration != null
+      ? customCelebration
+      : nationalCelebration || saint;
+
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         ...styles.day,
         borderBottomWidth: isLastDay ? BORDER_WIDTH : 0,
         backgroundColor:
-          getDay(day) === 0 || nationalCelebration
-            ? "lightblue"
-            : "transparent",
+          getDay(day) === 0 || nationalCelebration ? color : "transparent",
+        "&:hover": isEditable
+          ? {
+              cursor: "pointer",
+              borderRightWidth: "0.1cm",
+              borderBottomWidth: "0.1cm",
+              borderRightColor: "gray",
+              borderBottomColor: "gray",
+            }
+          : {},
       }}
       onClick={openEditor}
     >
       <span style={styles.dayNumber}>{numberDay}</span>
       <span style={styles.dayInitial}>{weekDay}</span>
-      <span style={styles.saint}>
-        {nationalCelebration ||
-          `St ${SAINTS?.[getMonth(day)]?.[getDate(day) - 1]}`}
-      </span>
+      <span style={styles.saint}>{celebration}</span>
       <span style={{ flexGrow: 1 }}></span>
       <span style={styles.birthdays}>
         {formatedBirthdays
@@ -105,7 +121,7 @@ const Day = ({ day, isLastDay }) => {
           )
           .join("/ ")}
       </span>
-    </div>
+    </Box>
   );
 };
 

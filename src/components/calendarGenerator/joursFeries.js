@@ -1,3 +1,5 @@
+import format from "date-fns/format";
+
 export const joursFeries = {
   "2025-01-01": "1er janvier",
   "2025-04-21": "Lundi de Pâques",
@@ -54,4 +56,12 @@ export const joursFeries = {
   "2021-11-01": "Toussaint",
   "2021-11-11": "11 novembre",
   "2021-12-25": "Jour de Noël",
+};
+
+export const getFerieDay = (day) => {
+  if (!day) {
+    return null;
+  }
+  const formatedDay = format(day, "yyyy-MM-dd");
+  return joursFeries[formatedDay];
 };
