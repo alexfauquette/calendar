@@ -28,6 +28,7 @@ const ColorPalette = ({ palette, value, onChange }) => (
   <Stack direction="row" spacing={0.5} sx={{ mt: 2, ml: 1 }}>
     {Object.keys(palette).map((colorName) => (
       <Box
+        key={colorName}
         sx={{
           width: 32,
           height: 32,
@@ -170,11 +171,7 @@ export default function SingleMonth() {
                   ref={calendarRef}
                   sx={{ width: "max-content" }}
                 >
-                  <Month
-                    year={2022}
-                    month={Number(month) || 0}
-                    editableDays={true}
-                  />
+                  <Month month={Number(month) || 0} editableDays={true} />
                 </Paper>
               </div>
             </Box>

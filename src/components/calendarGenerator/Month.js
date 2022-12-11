@@ -1,5 +1,8 @@
 import React from "react";
 import { eachDayOfInterval, intlFormat } from "date-fns";
+import { useSelector, useDispatch } from "react-redux";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import Day from "./day";
 import {
   PICTURE_WIDTH,
@@ -8,6 +11,7 @@ import {
   HEADER_TOP_PADDING,
   HEADER_HEIGHT,
 } from "../../const";
+import { setGeneratedYear } from "../../features/dayEditing";
 import CanvasImage from "../CanvasImage";
 
 // Create styles
@@ -48,7 +52,11 @@ const styles = {
   },
 };
 
-const Month = React.forwardRef(({ year, month, editableDays = false }, ref) => {
+const Month = React.forwardRef(({ month, editableDays = false }, ref) => {
+  const dispatch = useDispatch();
+
+  const year = useSelector((state) => state.dayEditing.generatedYear);
+
   const days = eachDayOfInterval({
     start: new Date(year, month, 1),
     end: new Date(year, month + 1, 0),
@@ -57,17 +65,52 @@ const Month = React.forwardRef(({ year, month, editableDays = false }, ref) => {
   return (
     <div style={{ ...styles.page, height: "29.7cm", width: "21cm" }} ref={ref}>
       <div style={styles.header}>
-        <span>
-          {intlFormat(
-            days[0],
-            {
-              month: "long",
-            },
-            {
-              locale: "fr",
-            }
-          ) + ` ${year}`}
-        </span>
+        {editableDays ? (
+          <>
+            <span>
+              {intlFormat(
+                days[0],
+                {
+                  month: "long",
+                },
+                {
+                  locale: "fr",
+                }
+              )}
+            </span>{" "}
+            <Select
+              value={year}
+              onChange={(event) => {
+                dispatch(
+                  setGeneratedYear({ generatedYear: event.target.value })
+                );
+              }}
+              variant="standard"
+              sx={{
+                verticalAlign: "middle",
+                fontSize: "22pt",
+              }}
+            >
+              {[2022, 2023, 2024, 2025].map((yyyy) => (
+                <MenuItem key={yyyy} value={yyyy}>
+                  {yyyy}
+                </MenuItem>
+              ))}
+            </Select>
+          </>
+        ) : (
+          <span>
+            {intlFormat(
+              days[0],
+              {
+                month: "long",
+              },
+              {
+                locale: "fr",
+              }
+            ) + ` ${year}`}
+          </span>
+        )}
       </div>
       <div style={styles.mainContent}>
         <div style={styles.pictures}>

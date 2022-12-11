@@ -35,6 +35,7 @@ export const dayEditingSlice = createSlice({
       "#90caf9",
       "#90caf9",
     ],
+    generatedYear: new Date().getFullYear() + 1,
   },
   reducers: {
     setCurrentEditor: (state, action) => {
@@ -58,6 +59,11 @@ export const dayEditingSlice = createSlice({
         state.monthColor = action.payload;
       }
     },
+    setGeneratedYear: (state, action) => {
+      if (action.payload.generatedYear) {
+        state.generatedYear = action.payload.generatedYear;
+      }
+    },
   },
 });
 
@@ -68,5 +74,6 @@ export const {
   setDayOverride,
   setMonthColor,
   setMonthsColors,
+  setGeneratedYear,
 } = dayEditingSlice.actions;
 export default dayEditingSlice.reducer;

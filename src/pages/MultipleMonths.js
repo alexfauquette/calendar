@@ -75,7 +75,6 @@ export default function MultipleMonths() {
                     sx={{ width: "max-content" }}
                   >
                     <Month
-                      year={2022}
                       month={monthIndex}
                       editableDays={false}
                     />
