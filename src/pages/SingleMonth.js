@@ -111,15 +111,16 @@ export default function SingleMonth() {
   };
   React.useEffect(() => {
     updateCalendarSize();
-    const ref = displayDivRef.current;
     window.addEventListener("resize", updateCalendarSize);
     return () => {
       window.removeEventListener("resize", updateCalendarSize);
     };
   }, []);
 
-  const handleColorChange = React.useCallback((newValue) =>
-    dispatch(setMonthColor({ monthIndex: Number(month), value: newValue }))
+  const handleColorChange = React.useCallback(
+    (newValue) =>
+      dispatch(setMonthColor({ monthIndex: Number(month), value: newValue })),
+    [dispatch, month]
   );
 
   return (

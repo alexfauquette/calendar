@@ -13,7 +13,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import { width } from "@mui/system";
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;

@@ -8,7 +8,7 @@ export const isImage = (name) => {
 };
 
 export async function verifyPermission(fileHandle, readWrite) {
-  if (fileHandle == undefined) {
+  if (fileHandle === undefined) {
     return false;
   }
   const options = {};

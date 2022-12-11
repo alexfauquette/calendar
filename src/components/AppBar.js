@@ -1,5 +1,5 @@
 import * as React from "react";
-import MUI_AppBar from "@mui/material/AppBar";
+import MUIAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -42,7 +42,7 @@ export default function AppBar() {
 
   return (
     <>
-      <MUI_AppBar
+      <MUIAppBar
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
@@ -117,7 +117,7 @@ export default function AppBar() {
             <SaveRoundedIcon />
           </IconButton>
         </Toolbar>
-      </MUI_AppBar>
+      </MUIAppBar>
 
       <div style={{ display: "none" }}>
         <CalendarToPrint ref={calendarToPrintRef} />
